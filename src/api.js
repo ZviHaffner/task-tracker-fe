@@ -7,3 +7,8 @@ const taskTrackerApi = axios.create({
 export const getAllTasks = () => {
   return taskTrackerApi.get("tasks");
 };
+
+export const updateTaskStatus = (id, newStatus) => {
+  const reqBody = { new_status: newStatus };
+  return taskTrackerApi.patch(`tasks/${id}`, reqBody);
+};
