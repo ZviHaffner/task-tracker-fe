@@ -1,12 +1,13 @@
 "use client";
 
-import { getAllTasks } from "@/api";
+import { getAllTasks, updateTaskStatus } from "@/api";
 import { useEffect, useState } from "react";
 
 export default function Home() {
   const [tasks, setTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [editingTaskId, setEditingTaskId] = useState(null);
 
   useEffect(() => {
     getAllTasks()
@@ -20,16 +21,35 @@ export default function Home() {
       });
   }, []);
 
-  const statusText = {
-    pending: "Pending",
-    "in-progress": "In Progress",
-    completed: "Completed",
-  };
+  function handleStatusChange(taskId, newStatus) {
+    updateTaskStatus(taskId, newStatus)
+      .then((res) => {
+        setTasks((prevTaskArr) => {
+          const nonUpdatedTasks = prevTaskArr.filter((task) => {
+            return task.id !== res.data.updatedTask.id;
+          });
+          return [...nonUpdatedTasks, res.data.updatedTask];
+        });
+      })
+      .catch(() => {
+        alert("Failed to update task status.");
+      });
+    setEditingTaskId(null);
+  }
 
-  const statusClasses = {
-    pending: "bg-red-500 text-white px-3 py-2 rounded",
-    "in-progress": "bg-yellow-400 text-black px-3 py-2 rounded",
-    completed: "bg-green-500 text-white px-3 py-2 rounded",
+  const statusMap = {
+    pending: {
+      text: "Pending",
+      className: "bg-red-500 text-white px-3 py-2 rounded",
+    },
+    "in-progress": {
+      text: "In Progress",
+      className: "bg-yellow-400 text-black px-3 py-2 rounded",
+    },
+    completed: {
+      text: "Completed",
+      className: "bg-green-500 text-white px-3 py-2 rounded",
+    },
   };
 
   return (
@@ -42,7 +62,7 @@ export default function Home() {
         {isLoading && (
           <div
             className={
-              "my-6 mx-auto size-12 border-8 border-gray-600 border-t-gray-200 rounded-full animate-spin"
+              "my-8 mx-auto size-12 border-8 border-gray-600 border-t-gray-200 rounded-full animate-spin"
             }
           />
         )}
@@ -66,7 +86,7 @@ export default function Home() {
                       <th className="p-4 text-left font-semibold text-gray-700">
                         Description
                       </th>
-                      <th className="p-4 text-left font-semibold text-gray-700">
+                      <th className="flex justify-between items-center p-4 text-left font-semibold text-gray-700">
                         Status
                       </th>
                       <th className="p-4 text-left font-semibold text-gray-700">
@@ -83,14 +103,45 @@ export default function Home() {
                         <td className="p-4">{task.title}</td>
                         <td className="p-4">{task.description}</td>
                         <td className="p-4">
-                          <span
-                            className={
-                              statusClasses[task.status] ||
-                              "bg-gray-300 text-black px-2 py-1 rounded"
-                            }
-                          >
-                            {statusText[task.status] || task.status}
-                          </span>
+                          {editingTaskId === task.id ? (
+                            <>
+                              <select
+                                value={task.status}
+                                onChange={(e) =>
+                                  handleStatusChange(task.id, e.target.value)
+                                }
+                                onBlur={() => setEditingTaskId(null)}
+                              >
+                                <option value="pending">Pending</option>
+                                <option value="in-progress">In Progress</option>
+                                <option value="completed">Completed</option>
+                              </select>
+                              <button
+                                aria-label="Close dropdown"
+                                onClick={() => setEditingTaskId(null)}
+                              >
+                                X
+                              </button>
+                            </>
+                          ) : (
+                            <>
+                              <span
+                                className={`${
+                                  statusMap[task.status].className ||
+                                  "bg-gray-300 text-black px-2 py-1 rounded"
+                                }`}
+                              >
+                                {statusMap[task.status].text || task.status}
+                              </span>
+                              <button
+                                aria-label="Edit task"
+                                className="px-1 cursor-pointer"
+                                onClick={() => setEditingTaskId(task.id)}
+                              >
+                                🖉
+                              </button>
+                            </>
+                          )}
                         </td>
                         <td className="p-4">
                           {new Date(task.due_date).toUTCString()}
