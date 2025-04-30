@@ -15,6 +15,12 @@ export default function Home() {
     status: "",
     due_date: "",
   });
+  const [newTaskErr, setNewTaskErr] = useState({
+    title: "",
+    description: "",
+    status: "",
+    due_date: "",
+  });
 
   useEffect(() => {
     getAllTasks()
@@ -67,21 +73,47 @@ export default function Home() {
 
   function handleNewTaskSubmit(e) {
     e.preventDefault();
+    setNewTaskErr({
+      title: "",
+      description: "",
+      status: "",
+      due_date: "",
+    });
 
-    addNewTask(newTask)
-      .then((res) => {
-        setTasks((prevTasks) => [...prevTasks, res.data.task]);
-        setNewTask({
-          title: "",
-          description: "",
-          status: "pending",
-          due_date: "",
+    let isValid = true;
+
+    if (!newTask.title) {
+      isValid = false;
+      setNewTaskErr((prev) => ({ ...prev, title: "Please Input a Title" }));
+    }
+    if (!newTask.status) {
+      isValid = false;
+      setNewTaskErr((prev) => ({ ...prev, status: "Please Choose a Status" }));
+    }
+    if (!newTask.due_date) {
+      isValid = false;
+      setNewTaskErr((prev) => ({
+        ...prev,
+        due_date: "Please Input a Date and Time",
+      }));
+    }
+
+    if (isValid) {
+      addNewTask(newTask)
+        .then((res) => {
+          setTasks((prevTasks) => [...prevTasks, res.data.task]);
+          setNewTask({
+            title: "",
+            description: "",
+            status: "pending",
+            due_date: "",
+          });
+          setShowNewTaskForm(false);
+        })
+        .catch(() => {
+          alert("Failed to add new task.");
         });
-        setShowNewTaskForm(false);
-      })
-      .catch(() => {
-        alert("Failed to add new task.");
-      });
+    }
   }
 
   return (
@@ -223,6 +255,12 @@ export default function Home() {
                               onChange={handleNewTaskChange}
                             />
                           </td>
+                        </tr>
+                        <tr className="text-center text-red-600 text-sm">
+                          <td>{newTaskErr.title}</td>
+                          <td></td>
+                          <td>{newTaskErr.status}</td>
+                          <td>{newTaskErr.due_date}</td>
                         </tr>
                         <tr>
                           <td>
