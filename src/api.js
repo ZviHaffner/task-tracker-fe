@@ -12,3 +12,8 @@ export const updateTaskStatus = (id, newStatus) => {
   const reqBody = { new_status: newStatus };
   return taskTrackerApi.patch(`tasks/${id}`, reqBody);
 };
+
+export const addNewTask = (newTask) => {
+  const reqBody = newTask;
+  return taskTrackerApi.post("tasks", reqBody);
+};
