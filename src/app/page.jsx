@@ -1,13 +1,13 @@
 "use client";
 
-import { addNewTask, getAllTasks, updateTaskStatus } from "@/api";
+import { addNewTask, getAllTasks } from "@/api";
+import TaskRow from "@/components/TaskRow";
 import { useEffect, useState } from "react";
 
 export default function Home() {
   const [tasks, setTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
-  const [editingTaskId, setEditingTaskId] = useState(null);
   const [showNewTaskForm, setShowNewTaskForm] = useState(false);
   const [newTask, setNewTask] = useState({
     title: "",
@@ -33,37 +33,6 @@ export default function Home() {
         setIsLoading(false);
       });
   }, []);
-
-  function handleStatusChange(taskId, newStatus) {
-    updateTaskStatus(taskId, newStatus)
-      .then((res) => {
-        setTasks((prevTaskArr) => {
-          const nonUpdatedTasks = prevTaskArr.filter((task) => {
-            return task.id !== res.data.updatedTask.id;
-          });
-          return [...nonUpdatedTasks, res.data.updatedTask];
-        });
-      })
-      .catch(() => {
-        alert("Failed to update task status.");
-      });
-    setEditingTaskId(null);
-  }
-
-  const statusMap = {
-    pending: {
-      text: "Pending",
-      className: "bg-red-500 text-white px-3 py-2 rounded",
-    },
-    "in-progress": {
-      text: "In Progress",
-      className: "bg-yellow-400 text-black px-3 py-2 rounded",
-    },
-    completed: {
-      text: "Completed",
-      className: "bg-green-500 text-white px-3 py-2 rounded",
-    },
-  };
 
   function handleNewTaskChange(e) {
     const { id, value } = e.target;
@@ -160,57 +129,12 @@ export default function Home() {
                   </thead>
                   <tbody>
                     {tasks.map((task) => (
-                      <tr
+                      <TaskRow
                         key={task.id}
-                        className="odd:bg-white even:bg-gray-100 hover:bg-gray-50"
-                      >
-                        <td className="p-4">{task.title}</td>
-                        <td className="p-4">{task.description}</td>
-                        <td className="p-4">
-                          {editingTaskId === task.id ? (
-                            <>
-                              <select
-                                value={task.status}
-                                onChange={(e) =>
-                                  handleStatusChange(task.id, e.target.value)
-                                }
-                                onBlur={() => setEditingTaskId(null)}
-                              >
-                                <option value="pending">Pending</option>
-                                <option value="in-progress">In Progress</option>
-                                <option value="completed">Completed</option>
-                              </select>
-                              <button
-                                aria-label="Close dropdown"
-                                onClick={() => setEditingTaskId(null)}
-                              >
-                                X
-                              </button>
-                            </>
-                          ) : (
-                            <>
-                              <span
-                                className={`${
-                                  statusMap[task.status]?.className ||
-                                  "bg-gray-300 text-black px-2 py-1 rounded"
-                                }`}
-                              >
-                                {statusMap[task.status]?.text || task.status}
-                              </span>
-                              <button
-                                aria-label="Edit task"
-                                className="px-1 cursor-pointer"
-                                onClick={() => setEditingTaskId(task.id)}
-                              >
-                                🖉
-                              </button>
-                            </>
-                          )}
-                        </td>
-                        <td className="p-4">
-                          {new Date(task.due_date).toUTCString()}
-                        </td>
-                      </tr>
+                        task={task}
+                        tasks={tasks}
+                        setTasks={setTasks}
+                      />
                     ))}
                     {showNewTaskForm ? (
                       <>
@@ -223,7 +147,6 @@ export default function Home() {
                               value={newTask.title}
                               onChange={handleNewTaskChange}
                             />
-                            {console.log(newTask)}
                           </td>
                           <td>
                             <input
