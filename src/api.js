@@ -17,3 +17,7 @@ export const addNewTask = (newTask) => {
   const reqBody = newTask;
   return taskTrackerApi.post("tasks", reqBody);
 };
+
+export const deleteTaskById = (id) => {
+  return taskTrackerApi.delete(`tasks/${id}`);
+};
