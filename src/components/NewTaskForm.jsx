@@ -95,6 +95,9 @@ const NewTaskForm = ({ setTasks, setShowNewTaskForm }) => {
             value={newTask.status}
             onChange={handleNewTaskChange}
           >
+            <option value="" disabled>
+              Select a Status
+            </option>
             <option value="pending">Pending</option>
             <option value="in-progress">In Progress</option>
             <option value="completed">Completed</option>
