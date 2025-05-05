@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Task Tracker
 
-## Getting Started
+## General Information
 
-First, run the development server:
+### Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Task Tracker is a web application designed to help caseworkers manage their tasks efficiently. It allows users to create, view, update, and delete tasks, with features like status tracking, due dates, and a responsive user interface.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Features
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+- Task Management: Create and delete tasks.
+- Status Tracking: Track and edit task statuses (Pending, In Progress, Completed).
+- Due Dates: Assign and display due dates for tasks.
+- Dynamic Forms: Add new tasks directly from the table.
+- Loading States & Error Handling
+- Responsive Design
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Tech Stack
 
-## Learn More
+- Framework: Next.js for server-side rendering and routing.
+- Frontend: React.js with functional components and hooks.
+- Styling: Tailwind CSS for responsive and modern design.
+- API Integration: Axios for backend communication.
 
-To learn more about Next.js, take a look at the following resources:
+### Usage
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Adding a New Task
+1. Click the "Add Task" button at the bottom of the table.
+2. Fill in the task details (title, description, status, and due date).
+3. Click "Add Task" to save the task.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Editing a Task
+1. Click the edit icon (🖉) next to a task.
+2. Update the task's status using the dropdown.
+3. The changes save on selection.
 
-## Deploy on Vercel
+Deleting a Task
+1. Click the delete button at the end of the row.
+2. Confirm by clicking OK in the alert popup.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Running the Project Locally
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Clone the repository:  
+`git clone https://github.com/ZviHaffner/task-tracker-fe.git`
+
+2. Navigate to the project directory:  
+`cd task-tracker-fe`
+
+3. Install dependencies:  
+`npm install`
+
+4. Start the development server:  
+`npm run dev`
+
+5. Open the app in your browser:  The app should be available at http://localhost:3000
+
+## Future Improvements
+- Search and Filter: Add functionality to search and filter tasks by title, status, or due date.
+- Add more status states: Allow users to use custom statuses (possibly with custom colour schemes).
+- Notifications: Add reminders for tasks nearing their due dates.
+- Authentication: Implement user authentication for personalised task management.
