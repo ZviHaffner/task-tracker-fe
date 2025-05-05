@@ -32,73 +32,87 @@ export default function Home() {
           Task Tracker
         </h1>
 
-        {isLoading && (
-          <div
-            className={
-              "my-8 mx-auto size-12 border-8 border-gray-600 border-t-gray-200 rounded-full animate-spin"
-            }
-          />
-        )}
+        <table className="w-full table-auto border-collapse">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="p-4 text-left font-semibold text-gray-700">
+                Title
+              </th>
+              <th className="p-4 text-left font-semibold text-gray-700">
+                Description
+              </th>
+              <th className="flex justify-between items-center p-4 text-left font-semibold text-gray-700">
+                Status
+              </th>
+              <th className="p-4 text-left font-semibold text-gray-700">
+                Due Date
+              </th>
+            </tr>
+          </thead>
 
-        {error && (
-          <div className="text-center text-red-500 font-semibold">{error}</div>
-        )}
+          <tbody>
+            {isLoading && (
+              <tr className="animate-pulse">
+                <td className="p-4">Loading your Task Titles</td>
+                <td className="p-4">Loading your Task Descriptions</td>
+                <td className="p-4">Loading your Task Statuses</td>
+                <td className="p-4">Loading your Task Due Dates</td>
+              </tr>
+            )}
 
-        {!isLoading && !error && (
-          <>
-            {tasks.length === 0 ? (
-              <div className="text-center text-gray-500">No tasks found.</div>
-            ) : (
-              <div>
-                <table className="w-full table-auto border-collapse">
-                  <thead>
-                    <tr className="bg-gray-200">
-                      <th className="p-4 text-left font-semibold text-gray-700">
-                        Title
-                      </th>
-                      <th className="p-4 text-left font-semibold text-gray-700">
-                        Description
-                      </th>
-                      <th className="flex justify-between items-center p-4 text-left font-semibold text-gray-700">
-                        Status
-                      </th>
-                      <th className="p-4 text-left font-semibold text-gray-700">
-                        Due Date
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {tasks.map((task) => (
-                      <TaskRow
-                        key={task.id}
-                        task={task}
-                        tasks={tasks}
-                        setTasks={setTasks}
-                      />
-                    ))}
-                    {showNewTaskForm ? (
-                      <NewTaskForm
-                        setTasks={setTasks}
-                        setShowNewTaskForm={setShowNewTaskForm}
-                      />
-                    ) : (
-                      <tr>
-                        <td>
-                          <button
-                            className="my-2 px-3 py-2 rounded bg-blue-500 text-white font-bold hover:bg-blue-100 hover:text-blue-500 cursor-pointer"
-                            onClick={() => setShowNewTaskForm(!showNewTaskForm)}
-                          >
-                            Add Task
-                          </button>
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
+            {error && (
+              <div className="text-center text-red-500 font-semibold">
+                {error}
               </div>
             )}
-          </>
-        )}
+
+            {!isLoading &&
+              !error &&
+              (tasks.length === 0 ? (
+                <tr className="text-gray-600">
+                  <td className="p-4">Create a task</td>
+                  <td className="p-4">
+                    You currently have no tasks to do. Click the 'New Task'
+                    button below to create a task.
+                  </td>
+                  <td className="p-4 ">
+                    <span className="bg-red-100 px-3 py-2 rounded">
+                      Pending
+                    </span>
+                  </td>
+                  <td className="p-4">Whenever : You're : Ready GMT</td>
+                </tr>
+              ) : (
+                tasks.map((task) => (
+                  <TaskRow
+                    key={task.id}
+                    task={task}
+                    tasks={tasks}
+                    setTasks={setTasks}
+                  />
+                ))
+              ))}
+
+            {showNewTaskForm ? (
+              <NewTaskForm
+                setTasks={setTasks}
+                setShowNewTaskForm={setShowNewTaskForm}
+              />
+            ) : (
+              <tr>
+                <td>
+                  <button
+                    className="my-2 px-3 py-2 rounded bg-blue-500 text-white font-bold hover:bg-blue-100 hover:text-blue-500 cursor-pointer"
+                    onClick={() => setShowNewTaskForm(!showNewTaskForm)}
+                  >
+                    Add Task
+                  </button>
+                </td>
+              </tr>
+            )}
+            
+          </tbody>
+        </table>
       </div>
     </main>
   );

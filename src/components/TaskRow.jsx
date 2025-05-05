@@ -8,15 +8,15 @@ const TaskRow = ({ task, tasks, setTasks }) => {
   const statusMap = {
     pending: {
       text: "Pending",
-      className: "bg-red-500 text-white px-3 py-2 rounded",
+      className: "bg-red-500 text-white",
     },
     "in-progress": {
       text: "In Progress",
-      className: "bg-yellow-400 text-black px-3 py-2 rounded",
+      className: "bg-yellow-400 text-black",
     },
     completed: {
       text: "Completed",
-      className: "bg-green-500 text-white px-3 py-2 rounded",
+      className: "bg-green-500 text-white",
     },
   };
 
@@ -83,24 +83,25 @@ const TaskRow = ({ task, tasks, setTasks }) => {
             </select>
             <button
               aria-label="Close dropdown"
+              className="p-1 text-gray-500 font-bold cursor-pointer hover:text-red-500"
               onClick={() => setEditingTask(false)}
             >
               X
             </button>
           </>
         ) : (
-          <div className="flex items-center gap-1">
+          <div className="flex items-center justify-between">
             <span
-              className={`whitespace-nowrap ${
+              className={`w-full px-3 py-2 text-center font-semibold rounded whitespace-nowrap ${
                 statusMap[task.status]?.className ||
-                "bg-gray-300 text-black px-2 py-1 rounded"
+                "bg-gray-300 text-black"
               }`}
             >
               {statusMap[task.status]?.text || task.status}
             </span>
             <button
               aria-label="Edit task"
-              className="px-1 cursor-pointer"
+              className="px-2 cursor-pointer"
               onClick={() => setEditingTask(true)}
             >
               🖉
