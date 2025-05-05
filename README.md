@@ -1,5 +1,9 @@
 # Task Tracker
 
+## Deployed URL
+
+https://task-tracker-fe-kohl.vercel.app/
+
 ## General Information
 
 ### Overview
